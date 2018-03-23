@@ -1,0 +1,19 @@
+---
+font:
+  family: Times New Roman
+  title:
+    size: 18
+    weight: bold
+    text-align: center
+  author:
+    size: 12
+    weight: bold
+    text-align: center
+  address:
+    size: 10
+    text-align: center
+  abstract:
+    size: 8
+    text-align: justified
+  introduction:
+    size: 10
