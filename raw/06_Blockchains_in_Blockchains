@@ -1,0 +1,169 @@
+Plasma 6章 Blockchains in Blockchains
+
+すでに説明したように、Plasmaのコアの設計は計算処理をスケールさせるためのものである。しかし我々は不正証明を発行したり、ブロックスペースの可用性を確保するためにblock withholding問題と争わねばならない。Plasmaにおけるblock withholdingへの解決策は、チェーンの停止やwithholdingに対して大量exitを実行できるシステムである。
+しかし大量exitトランザクションは特にもしUTXOたちの数が多くそのbitmapが発行されねばならないとき非常に高価だ。加えて、単一のexitだけを実行する方が望ましい。大量引き出しトランザクションは多数の参加者を巻き込んだ複雑な相互ゲームを要求する。最後の手段として用いるべきだ。
+代わりに、状態を証明するための存在できる高次と低次の法廷を用意した。当事者はルートチェーンを上級法廷としてみることができ、それは下級法廷すべての代表である。彼らの法廷での力を可能にするのはルートチェーンの法である。これは法廷にスケーラビリティを与え、下級法廷の状態が異議申し立てか停止に陥ったとき、これらはより法廷を代表できる上級法廷に移動する必要がある。状態の検証の高級法廷へのブロードキャストは常に可能だが、それは高くつくだろう。
+
+全ての状態はマークル化されていて、ルートチェーンにコミットされる。もっとも楽観的なケースではブロックヘッダが直接親チェーンに発行されて、親チェーンはそれをさらに親に伝え、ルートチェーンに届くまで続ける。ブロックヘッダの中身はマークル化された親チェーンのブロックに対するコミットだ。
+トランザクションはPlasmaチェーンやなんらかの親のPlasmaチェーン、あるいはルートチェーンにに提出される。その目的はfungibilityと検閲耐性を保証するためだ。特に、チェーンの停止やブロックの非開示のイベントでは、ユーザーはまだ資金を引き出しうる。
+ブロックのコミットが提出された時、それが承認される前にルートチェーンに一定の量のconfirmationが承認されるのを待たねばならない。その間、不正証明がルートチェーンと中間Plasmaチェーンに提出されるかもしれない（それはブロックルートを通してルートチェーンにコミットされる）。
+どの個別のPlasmaチェーンもPlasmaブロックにバンドルされたコミットのステートマシンを実行している。個々のPlasmaチェーンは子Plasmaチェーンの詳細を詮索するかもしれないし、しないかもしれない。
+
+代わりに、彼らは確認されたPlasmaチェーンの残高を持っている。子Plasmaチェーンが自身の状態を更新した時、彼らはPlasmaブロックヘッダのハッシュをどれかの親に提出する。
+これは特定のブロックステートは複数の親チェーンに提出されうることを示唆している。複製イベント中、それは不正にはならないかもしれない（しかしアプリケーションに依存した特定のコンセンサスの状態においてペナルティを受けうる）。一方で、もし状態のごまかし、例えば親1にコミットされた状態が親2と異なるなどがあった場合、Plasmaチェーンへの供託者は彼らのデポジットを失う。
+
+新たな子の状態更新は以下の彼らの状態更新メッセージを使うだろう：支払われた手数料（そして通貨単位）、コミットされたルートブロックハッシュ、前のブロックは種、コミットする親ブロックハッシュ、デポジット証明、引き出し証明など。
+親チェーンになにがコミットされていようが、子チェーンは再帰的な全ての親のそれらのデータを観測している。kれはそれがコミットするはずのそれが持つ証明は、ごまかされも二重支払いトランザクションもされていない（し、それゆえにトランザクションをごまかしのイベント中でslashにさらしている）。
+ごまかしのイベント中で、親チェーンの状態は常に優先される。インセンティブは彼らをしるあらゆる当事者によってごまかしの開示を作る。
+デポジットと引き出しはPlasmaと親チェーン両方で可能である。
+
+引き出しはPlasmaチェーンの間で十分な流動性と他の当事者が喜んで着資金をどこか他の場所に置く条件で可能である。これはクロスチェーンのアトミックスワップを通してなされえる。
+もし誰かがメインチェーンを使ってクリアしたいと願ったとき、HTLCのチェーン間のオンチェーンライトニングペイメントのように実装するのは可能である。
+すべての不正証明はマークル化されたチェーンコミットの証明を提供しなければならない。偽の証明は特定の詐欺ブロックに責任のあるPlasmaチェーンをペナルティする。
+初めのデザインの複雑性は検閲耐性に関する複数の親チェーン間のトランザクション状態のブロードキャストである。早期のイテレーションは状態遷移やトランザクションが個々のPlasmaチェーンの中だけで実行されていると推測でき、他のチェーンとのインタラクションはコミットされた親/子チェーンへのmessage passingとデポジット・引き出しだけである（訳注：Shard間通信のないごくシンプルなShardingということ）。その方法では、初期においては、デポジットと引き出しの証明絡みの部分だけが複雑な程度である。
+データのコミットは取り込み証明の一部分として推測される。
+6.1 Receiving Funds Inside a Chain
+In this hierarchical framework of blockchains in blockchains, when one receives funds from another user, the process is as follows if Alice wants to send funds to Bob in a Plasma chain 3 levels deep:
+ 
+6.1 チェーン内で資金を受け取る
+ 
+ブロックチェーン群の中のこの階層的なフレームワークでは、AliceがPlasmaチェーンの中でBobに資金を送ろうとする場合、次のような処理が行われる。
+ 
+3つの深いレベル：        	
+ 
+1.    Alice coordinates with Bob that she wants to send funds to Bob. Alice discloses to Bob the Plasma chain in which Bob will receive the funds. Bob decides whether
+to accept the payment, specifically, Bob should ensure that the smart contract on the root blockchain is one in which he is willing to accept payment (smart contract code/mechanisms, as well as acceptable consensus exit delays, etc.)
+ 
+ 
+1.アリスはボブに資金を送ろうとしていることをボブと調整します。
+ 
+AliceはBobに、Bobが資金を受け取るPlasmaチェーンを開示します。
+支払いを受け取るため、ボブは特別に、彼が資金を受け取るつもりであるルートチェーン上のスマートコントラクトを確認する必要があります。
+（スマートコントラクトの契約コード/メカニズム、許容可能なconsensus exit delaysなど）
+ 
+1.    If this is payment for some good, they pre-sign a statement defining the conditions of payment, in many cases it will be a proof of payment by block inclusion in the blockchain with sufficient maturity, however it can also be a pay-to-contract-hash in some circumstances. This is not on-chain but merely to attach the terms for settlement to prove to others.
+ 
+ 
+2.確認した結果、支払いに問題なければ、彼らは支払い条件を定義するステートメントに事前署名しますが、
+多くの場合、十分な成熟度を持つブロックチェーンにブロックを含めることにより支払いの証拠となりますが、状況次第では、pay-to-contract-hashにすることもできます。これはオンチェーンではなく、単に他人に証明するための決済の条件を付け加えるだけです。
+ 
+1.    Alice makes the payment inside the Plasma chain. The block gets signed off by the validators, and the commitment to the block header gets published into the parents’ blocks. Merkleized commitments to child Plasma chains are included in every parent block and ultimately included in the root blockchain.
+ 
+ 
+3. AliceはPlasmaチェーン内で支払いを行います。
+ブロックはバリデータによって承認され、そしてブロックヘッダーへのコミットメントは親チェーンのブロック内に公開されます。マークライズ化された子Plasmaチェーンへのコミットメントはすべての親チェーンのブロックに含まれ、最終的にルートブロックチェーンに含まれます。
+ 
+1.    Bob fully syncs with the root blockchain, then validates the chain in which the funds are being received and any parent of that. Bob does not need to validate other Plasma chains which his funds are not a part of. Bob can fully validate that Alice has made the payment in the Plasma chain with sufficient maturity in the worst-case. However, if rapid finality is desired, Alice can sign off on the payment being fulfilled in the new block (see the previous statement on receiving payments inside a Plasma chain). If Alice is willing to sign off on the payment and Bob accepts it (as he is able to prove a withdrawal), then it is presumed that finality is reached. Bob is able to withdraw the funds from this Plasma chain.
+ 
+ 
+4.Bobはルートブロックチェーンと完全に同期し、資金が入っているチェーンとその親のいくつかを検証します
+Bobは、彼の資金が含まれていない他のPlasmaチェーンを検証する必要はありません。
+最悪の場合は、ボブはアリスが十分な成熟度をもつPlasmaチェーンで支払いを行ったことを完全に検証することができます。
+ 
+しかし、迅速な最終決定が求められる場合、アリスは新しいブロックで支払われた支払いを承認することができます（Plasmaチェーン内での支払い受け取りについては、以前の定義を参照してください）。
+ 
+アリスが支払いを承認して、ボブがそれを受け入れるなら（彼は出金を証明することができるので）、最終的に支払いは達成されたと見なされます。 BobはこのPlasmaチェーンから資金を引き出すことができます。
+ 
+The key aspect of this design is that one is wholly responsible for validating the child blockchains. If Bob does not validate the Plasma chain and all parents (ultimately the periodic commitment into the root chain is published), then it should not be treated as fulfilled. Similar to the construction in Lightning Network, Bob does not need to care what happens in the other Plasma blockchains. He only observes the correctness of the chains which matters to him. When he has the ability to use the coins, he then is confident he is able to spend them.
+ 
+この設計の重要な側面は、子ブロックチェーンの検証に全責任を負うということです。
+BobがPlasmaチェーンとすべての親を検証しない場合（最終的には
+ルートチェーンへの定期的なコミットメントが公開されている）、それが達成されたものとして扱われるべきではありません。Lightning Networkの構築と同様に、Bobは他のPlasmaブロックチェーンで何が起こるかを気にする必要はありません。
+彼は彼にとって重要なチェーンの正確さだけを観察します。
+彼はコインを使用する能力を持っているとき、彼はそれらを使うことができると確信しています。
+ 
+6.2 Receiving Funds from a Parent Chain
+Receiving funds from a parent chain is similar to a deposit from the root blockchain, the only difference being the recipient needs to validate all parent Plasma chains (rather than just the Plasma chain itself). Deposits into a child Plasma chain is fast.
+6.2 親チェーンから資金を受け取る
+親チェーンから資金を受け取ることは、ルートブロックチェーンからのデポジットに似ています。
+唯一の違いは、受信者がすべての親プラズマ・チェーン（単にプラズマ・チェーン自体ではなく）を検証する必要があるということです。 子プラズマチェーンへの入金は速いです。
+ 
+6.3 From a Tree to a Web
+While the above description is about a single parent chain, it’s possible for plasma chains to watch multiple root blockchains. This allows for one to update balances with child chains. Care must be given as failure on one parent may not be recognized by all participants at once, and cascading systemic failures must be mitigated via time-delays and minimizing assumptions of cross-chain liquidity. The correct construction for this is an open problem.
+ 
+6.3 ツリーからウェブへ
+ 
+上記の説明は単一の親チェーンに関するものですが、プラズマチェーンは複数のルートブロックチェーンを監視することが可能です。
+これにより、子チェーンとのバランスを更新することができます。
+ある親の障害がすぐにすべての参加者によって認識されない可能性があるため、注意を払う必要があり、cascading systemic failuresはtime-delaysとクロスチェーン流動性の推定を最小化することにより、緩和される必要があります
+このための正しい構成は未解決の問題です。
+ 
+ 
+ 
+ 
+6.4 Mitigating the Block Withholding Problem
+By constructing many venues where one can broadcast a withdrawal transaction, there can now be many possible venues to exit from a chain which has halted or has blocks withheld. If a child chain fails, then an individual simple exit can be processed on the parent chains, even if transactions become expensive on the root chain.
+This allows one to have some measure of confidence in holding micropayment outputs on the Plasma chain, provided that they have assurance that one of the parent Plasma chains are operating correctly. This goal is the primary cause of this, as well as mitigating the impact of cascading failures.
+ 
+6.4 ブロック源泉徴収問題の緩和
+出金トランザクションをブロードキャストすることができる多くのvenuesを作ることにより、停止しているか、ブロックを保留しているチェーンから出る可能性のある多くの場を存在させることができます。
+ 
+子チェーンが失敗した場合、ルートチェインでトランザクションが高価になっても、親チェーンで個々の単純な終了を処理できます。
+これにより、親プラズマ・チェーンの1つが正しく動作していることが保証されていれば、Plasmaチェーン上のマイクロ・ペイメント・アウトプットを保持する際にある程度の信頼感を持たせることができます。
+このゴールは、第一の動機であり、cascading failuresの影響を緩和します。
+ 
+If one has sufficiently large output balance held, they do not need to do significant underwriting if there isn’t significant time-value, however, if one holds a single low-value output (where paying the transaction fee becomes too expensive), then one should have some measure of assurance that one of the parent Plasma chains have availability. If one wants greater assurance, one can run nested chains deeply with many independent parties running each Plasma chain at each level. There are some tradeoffs that exist by doing it this way, though, as if a particular Plasma chain starts becoming Byzantine, then everyone will need to do a mass-withdrawal to a new chain. If there is a parent which is not byzantine, though, it is possible to continue operating and facilitate rapid transitions to another chain if the parents refuse to process the Byzantine chain’s commitments.
+ 
+十分に大きな出力バランスが保持されており、有効な時間がない場合には、有効な引受を行う必要はありませんが、一つのlow-value output（取引手数料の支払いが効果になってしまう場合）を保有している場合は、親のPlasmaチェーンの1つが有効であるという、ある程度の裏付けが必要です。
+より大きな裏付けが欲しい場合は、各レベルで各Plasmaチェーンを実行する多くの独立した当事者が深くネストされたチェーンを実行できます。
+このようにすると、いくつかのトレードオフが存在しますが、特定のプラズマチェーンがビザンチンになるように、誰もが新しいチェーンにmass-withdraｗlする必要があります。
+ビザンチンではない親がいる場合ですが、親がビザンチンチェーンのコミットメントを処理することを拒否した場合は、別のチェーンへの迅速な移行と操作を継続することが可能です。
+ 
+ 
+It’s possible that services may arise whereby it doesn’t do anything other than process transactions in the event of a child chain fails. The operator of this service doesn’t need to do anything unless a child chain fails (to the point where they can be sufficiently passive that they could hypothetically turn off their servers until a failure occurs, block headers automatically skip them to be broadcast on a chain a level above the passive operator).
+We expect that many of the withdrawals in parent chains will be simple withdrawals instead of mass withdrawals, as a parent chain can have incredibly high transaction volume (block size/gas limit).
+ 
+これには、子チェーンが失敗した場合のプロセストランザクション以外の処理を行わないサービスが発生する可能性があります。
+ 
+このサービスのオペレータは、子チェーンが失敗しない限り、何もする必要はありません（障害が発生するまで仮想的にサーバをオフにできるだけの十分な受動的なポイントまで、ブロックヘッダは自動的にそれらをスキップして パッシブオペレータの上のレベルにチェーンします）。
+親チェーンでは非常に高いトランザクション量（ブロックサイズ/ガス制限）を持つことができるため、親チェーンの引き出しの多くは、一括引き出しの代わりに単純な引き出しになると予想しています。
+ 
+ 
+ 
+6.5 Exiting
+Mass exits are possible to a parent chain or the root chain. If the child chain begins to act Byzantine, it’s presumed that any state may be invalid, similar to a Plasma chain without nested parent chains. Similarly, mass exits are a way to quickly exit from a Byzantine parent chain. It is possible to skip a parent chain (or the child chain itself) to its parent(s) or the root chain.
+ 
+6.5 終了
+親チェーンまたはルートチェーンにMass exitsが可能です。
+子チェーンがビザンチンの動作を開始した場合、ネストされた親チェーンがないPlasmaチェーンと同じく、どのステートも無効であると推測されます。
+同様に、Mass exitsは、ビザンチン親チェーンから迅速に抜け出す方法です。
+親チェーン（または子チェーン自体）をその親またはルートチェーンにスキップすることは可能です。
+ 
+While it may seem as though there’s some complexity in the design, the presumption is that if any chain is Byzantine, all its children must act. There are optimizations that are possible so that exits are possible without coordination via a heartbeat (exits are bydefault without a signature revoking it on the users’ side and the Plasma chain itself making a commitment that it has received it, but may be a premature optimization).
+ 
+デザインは複雑なように見えるかもしれませんが、いくつかのチェーンがビザンチンであれば、そのすべての子チェーンが行動しなければならないということです。
+ハートビートを介して、整合なしに抜け出す最適化があります。（出口はユーザ側での署名なしに取り消すことができるのがデフォルトで、プラズマチェーン自体がそれを受け取ったというコミットメントをしていますが、時期尚早の最適化である可能性があります）
+ 
+ 
+The construction is basically the same as the simple exit or mass exit, however there are some minor changes in the design to support nested chains. Exits may be duplicated, but exits on the parent chain always take priority. If a parent chain begins to act Byzantine, then the exit can be committed on the root chain as well. It is the responsibility of the (perceived to be Byzantine Plasma chain) to reflect and update their state of the parent/root chain duplicated exit and revoke the duplicated exit in its own chain. However, if it does not do so, users’ funds will be available on the root chain.
+ 
+この設計は基本的にsimple exitまたはmass exitと同じですが、ネストされたチェーンをサポートするためにデザインに若干の変更があります。
+出口は重複することがありますが、親チェーンの出口は常に優先されます。
+親チェーンがビザンチンの動作を開始すると、出口もルートチェーンでコミットできます。
+ （ビザンチンプラズマチェーンであると認識される）親/ルートチェーンの複製された出口の状態を反映および更新し、複製された出口をそれ自身の鎖で取り消すのは、その責任です。
+しかし、そうしなければ、ユーザーの資金はルートチェーン上で利用できるようになります。
+ 
+ 
+ 
+If a parent is Byzantine but the child in which one holds funds is operating correctly, it is possible to avoid doing a complex mass exit transaction. Participants find a new chain to send their funds to and do a simple exit whereby a liquidity provider receives funds in this child chain and the other users receive funds on the new chain (without the Byzantine parent). Commitments of the child chain blocks are published on the root chain or the higher-level parents (avoiding the Byzantine node). Users quickly have funds in the new chain and the liquidity provider exits their funds onto the root or highest parent later. The purpose of this is that new funds can be quickly allocated into the new chain and exits occur rapidly.
+ 
+親がビザンチンであるが、資金を保有している子チェーンが正しく動作している場合、複雑なmass exit transactionを避けることができます。
+ 
+参加者は資金を送付するための新しいチェーンを見つけ、流動性プロバイダーがこの子チェーンで資金を受け取れるように簡単なexitを行い、他のユーザーは新しいチェーン（ビザンチンの親なし）で資金を受け取ります。 子チェーンブロックのコミットメントは、ルートチェーンまたは上位レベルの親に公開されます（ビザンチンノードを避ける）。
+ユーザーはすぐに新しいチェーンに資金をもち、流動性提供者は親または最も高い親に後で資金を出す。
+これは、新しい資金が新しいチェーンに迅速に配分され、exitが急速に行われることを目的としています。
+ 
+ 
+6.6 Scalability
+
+This allows for UTXO bitmap scalability, in the event that a bitmap gets too large, one just needs to split the bitmap into multiple child chains. For child chains, it is presumed that it is represented as an account balance with block height nonces (and candidate chain tips) instead of an output. Similarly, for states which prefer to use accounts instead of UTXOs, then it is possible as well provided that one is willing to make the tradeoff of only supporting simple withdrawals.
+The end result of this is a great deal of scalability for users. They only need to observe Plasma chains which their funds are held (as well as its parents). This effectively shards the dataset into validation which affects oneself.
+6.6スケーラビリティ
+ 
+これにより、UTXOのビットマップスケーラビリティが可能になります。ビットマップが大きくなりすぎると、ビットマップを複数の子チェーンに分割するだけで済みます。
+子チェーンへは、出力の代わりにブロック高さnonces（および候補チェーンヒント）を持つ口座残高として表されると推定されます。
+同様に、UTXOの代わりにアカウントを使用することを選り好むステートでは、簡単な引き出しをサポートするだけのトレードオフも可能です。
+最終的な結果は、ユーザーにとって大きなスケーラビリティです。 彼らは、彼らの資金が保持されているプラズマチェーン（その親チェーン）を観察するだけでよい。 これは、自分自身に影響を与えるデータセットの検証を効果的に分担することができます。
+
+
+

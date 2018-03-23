@@ -1,0 +1,136 @@
+4 Related Work 
+4 関連プロジェクト
+
+Some related projects propose a merkle tree with reduction steps as proof of computation, however this proposal is primarily around data availability and encouraging cost minimization around fraud proofs, with a protocol to manage these via an economically incentivized persistent sharded group of chains. 
+幾つかの関連プロジェクトはproof of computation用に、簡略化されたメルカトルツリーを提案している。しかし、この提案は主に、経済的にインセンティブ設計された持続的なシャードチェーングループを経由したプロトコルによりデータの可用性と不正検知のコストを最小にすることである。
+
+
+Other related projects propose a system of child blockchains, but have significant differences in approach. Plasma uses a merkleized proof to enforce child chains.
+他の関連プロジェクトは子ブロックチェーンのシステムを提案した。しかし、アプローチ方法に大きな乖離があった。Plasmaは子チェーンを 履行する為にmerkleized proof を使っているのだ。
+
+4.1 TrueBit 
+4.1 TrueBit
+
+Plasma shares a great degree of similarity in the reliance of fraud proofs as TrueBit[10].
+PlasmaはTrueBitの不正検知システムと似た類似性を持っている。
+
+The fraud proof construction is similar to TrueBit, and nearly all the work by TrueBit can directly apply to Plasma, especially the work around merkleized proofs of state transitions. 
+不正検知の作成方法はTrueBitと似ている。そして、TrueBitによるほぼ全ての活動、特にstate transitionsのmerkleized proofsなどはPlasmaに直接適応される。
+
+TrueBit design allows for compact proofs to be created to submit to the Ethereum blockchain, which is necessary for Plasma, so nearly all of the heavy lifting done by the TrueBit paper and team is directly applicable in this design. 
+TrueBitのデザインはイーサリアムブロックチェーンにcompact proofsが送られるように設計されている。これはPlasmaにとって必要なことである。TrueBitの提案書とそのチームによる手間がかかる作業のほぼ全てはこの設計に直接当てはめることができる。
+
+The use of the Verification Game, which generates merklized proofs provides increased benefits with reducing the scale of computation. 
+マークル木を用いた証明が生成されるこの認証ゲームの使用は、計算量の増加を減らすという点でメリットがある。
+
+Similar assumptions as TrueBit applies, namely that computational state must be computable and broadcastable online (large pieces of data must be split in multiple rounds), data availability problems needs to be mitigated, failure must be disclosed. 
+TrueBitの適応と似た想定、特に、computational stateは計算可能かつオンラインで拡散可能でなければならない。（大きなデータが複数の小さなデータに分割された状態）データの可用性の問題は緩和される必要があり、通信の失敗は公開されなければならない。
+
+We attempt to mitigate these problems, especially the latter two. 
+私達はこれらの問題、特に後の2つの問題を緩和しようとしている。
+
+The primary aspect which Plasma attempts to build upon TrueBit is the notion of multiparty participants which need to compute on shared state. For example, a set of participants only care about a subset of the data and computation and needs to only compute aspects related to themselves (e.g. BBS or exchange). 
+PlasmaがTrueBit上に構築している主な要素は、共有されたstateを計算する必要のある複数の参加者の概念である。例えば、幾つかの参加者が特定のデータや計算だけを注目し、関連したデータのみを計算するという場合がある。（例：BBS or exchange)
+
+We also attempt to mitigate the issue of enforcement of computational rounds via off-chain venues of enforcement. 
+私達はまた、オフチェーンを経由して計算を実行することでオンチェーンでの計算量の問題を緩和するこころみを行っている。
+
+4.2 Blockchain Sharding Current work on blockchain sharding[11] uses similar techniques and goals, e.g. Ethereum Sharding proposal.
+ブロックチェーン上でシャーディングをする現在の試みの多くは、似た技術を用い、似た目的を持っている。例：Ethereum Sharding
+
+This construction may be compatible as a higher layer. 
+これは上位層レイヤーで互換性があるかもしれない。
+
+If the root blockchain is sharded, then the Plasma chain can run on top of this for greater scalability and other benefits. 
+もし、ルートブロックチェーンがシャーディングされていれば、Plasmaチェーンはルートチェーン上でスケーラビリティーを持ち、他の恩恵を受ける。
+
+This can also be a testbed for different sharding techniques as there are no consensus changes necessary in Ethereum and other rich stateful blockchains to begin basic operation. 
+これはまた、イーサリアムや他の安定しているブロックチェーンで基本的な作業を行う為に、コンセンサスの変更が必要なしに異なるシャーディング技術がテスト可能である。
+
+4.3 Federated Sidechains Plasma is not a federated sidechain[12] as it does not rely upon the federation for honest activity, nor does it rely entirely upon trusted actors to enforce state inside the chain. 
+4.3 結合しているプラズマサイドチェーンは正直な一連の活動や、チェーン上でstateを履行する完全に信頼された参加者に依存しないので、単体のサイドチェーンではない。
+
+Plasma also externalizes ledger state to another blockchain allowing the use of the same coin/token, however it does enforcible verification if the fraud proof is available. 
+Plasmaはまた他のブロクチェーンで同じコインやトークンを使用することを可能にする。しかし、それはもし、fraud proof が利用可能なら履行可能な立証である。
+
+Plasma does not rely upon a strong federation of actors, which requires significant underwriting risk on the correctness of these actors, for this reason it is not a Federated-Pegged Sidechain. 
+Plasmaは参加者の強力な強力に依存していない。それらの参加者の正しさには非常に大きな潜在的なリスクがある。そのことによってPlasmaは結合された接続口のあるサイドチェーンではない。
+
+Drivechains[13] shares similarity to federated sidechains, except the validators are an unknown, changing set of participants (miners), with greater decentralization. 
+Drivechainsはバリデーターが匿名かつランダムでありより分散化されている点を除き結合されたサイドチェーンとにている。
+
+4.4 Merge-Mined Blockchain Examples include Namecoin, which create concurrent blocks with the parent blockchain[14]. 
+4.4 Merge-Mined Blockchain Examplesは親ブロックチェーン[14]と共存するブロックを作成するNamecoinがある。
+
+This presumes full validation of the blockchain, thus does not provide scalability benefits. 
+これは従って、ブロックチェーンのフルバリデーションはスケーラビリティー問題に解決策を提示しないと想定されている。
+
+Extension blocks are an example of a merge-mined chain which allows for funds to move between the primary blockchain and the merge-mined chain (with an enforcement mechanism of the full set of miners as a consensus rule on the root chain). 
+拡張されたブロックは主要なブロックチェーンとmerge-mined chain(with an enforcement mechanism of the full set of miners as a consensus rule on the root chain)の間で資金のやり取りをするmerge-mined chainの一例である。
+
+
+Merge-mined chains permit for new consensus rules and election of users to validate only the chains they care about, but the miners/validators must validate everything.
+Merge-mined chainsは、新しいコンセンサスのルールと所属しているチェーン（だけ）の正当性を確認するユーザーの選出するが、マイナーと検証者は全てを検証しないといけない。
+
+
+The goal of Plasma is to ensure that only users and miners need to validate the chains relevant to themselves.
+Plasmaのゴールは、ユーザーとマイナーだけが彼ら自身が関与しているチェーンを検証することができることを確立することである。 
+
+4.5 Treechains Treechains[15] proposes tree structures blockchains which are validated in the child blocks using Proof of Work. 
+Treechains Treechainsは子ブロックをProof of Workを使って検証できるようなツリー構造のブロックチェーンを提示している。
+
+The root chain has the summed proof of work of all child blockchains.
+ルートチェーンは全ての子ブロックチェーンのproof of workを要約したものである。 
+
+Lower down the stack has higher security, but higher along the stack may or may not depending on the level of validation and work. 
+その積み重ねの下層ほどセキュリティーが強くなる。しかし、上層はバリーションとかけた計算コストによってセキュリティーのレベルが決まるのでセキュリティーが強いこともあれば弱いこともある。
+
+
+While treechain’s topology is in a tree  structure, its structure is dependent upon mining security being summed via the branches.
+ツリーチェーンのトポロジーは複数の階層に分かれているけれど、その構造はマイニングセキュリティーの総和に依存している。
+
+
+The security model has lower security on the leaves, as it is secured by Proof-of-Work. Plasma is the reverse with the mining done with full security only on the root, with the security and proofs flowing from the root.
+セキュリティモデルはProof of Workによって機能しているが、「葉」の部分では弱くなる。Plasmaはルートチェーンでのみ完全なセキュリティのマイニングが行われる。なので、セキュリティと検証証明はルートチェーンに依拠している。
+ 
+Similar work is in building proofs of blocks seen in a tree formation. 
+同様の活動が、tree formationのブロックの正当性を証明する作業にも見受けられる。
+
+4.6 zk-SNARKs and zk-STARKs Non-interactive proofs of computation allow for one to have significant benefits in scalable computation[16]. 
+4.6 zk-SNARKsとzk-STARKsの証明者と承認者がリアルタイムで互いにやり取りをすることのない証明は処理性能の向上に多大な恩恵がある。
+
+zk-SNARKs/STARKs and other forms of non-interactive compact proofs is complimentary to Plasma.
+zk-SNARKs/STARKs と証明者と承認者がリアルタイムで互いにやり取りをすることのないコンパクトな証明はPlasmaにメリットがある。
+
+A proof can be provided along with the result of the merklized computation. Additionally, benefits exist to reduce systemic attacks when holding small balances on a child plasma chain. There has already been research in SNARKs for MapReduce functionality[17] and we hope this leverages on that research and Plasma extends it by making the proofs orderable and enforcible within a set of blockchains. 
+証明が、マークル木の計算結果に伴って提供される。それに加えて、子Plasmaチェーンで少額の量を保有している際に、systemic attacksの可能性を減らす恩恵もある。MapReduce functionality用にSNARKsは既に研究が行われている。[17] そして私達はこれが研究を加速させ、Plasmaがいくつかのブロックチェーン上で順序付け可能で履行可能な証明を作ることによってこの機能を拡張させることを期待している。
+
+Further benefits include proofs of computation which allow for faster syncing and verifying of chains themselves. 
+さらに、より早く同期とチェーン自体の検証作業を行うことで、計算量の証明にも恩恵がある。
+
+Note that zk-SNARKs does not solve the issue around data availability, just reduces the amount of data requirements and computation. 
+zk-SNARKsはデータの可用性の問題をとかないことは注意しないといけない。計算と必要なデータ量を減らすだけである。
+
+This is especially useful as a replacement or complement for any assert/challenge time-based mechanisms.
+これは特に、実時間性に問題を抱える仕組みを置き換えたり補完するのに有効である。
+
+ zk-SNARKs can be helpful as defense in depth. If the last line of defense is using the blockchain without fancy cryptography, the second line of defense can be zk-SNARKs, and the first line of defense is trusted computing hardware. 
+ zk-SNARKsは高度な安全性を確立するのに有益である。セキュリティの最終レイヤーが好みの暗号を使用していないブロックチェーンでは、セカンドレイヤーにはzk-SNARKsが使える。そしてファーストレイヤーには信頼されたハードウェアがあればよい。
+
+Withdrawals from Plasma chains could be secured by zk-SNARKs which gives the benefit of optionally not requiring the bitmap, which may allow for very small balances to be transferred. 
+Plasmaチェーンからの引き出しは少額であっても、bitmapを必要としないメリットがあるzk-SNARKsによって守られる。
+
+4.7 Cosmos/Tendermint Cosmos[18] arranges blockchains in a Cosmos ”Hub” and has child blockchains ”Zones” validated over a proof of stake system. Significant similarity with the construction of child blockchains exist, however Plasma is reliant upon construction fraud proofs to enforce state in child chains and is genericized to be applicable to many chains. The proof of stake construction for Cosmos presumes a 2/3 honest majority of validators, including validators of its Cosmos Zone. 
+4.7 Cosmos/Tendermint Cosmos[18] はCosmos “Hub”でブロックチェーンが繋がり、Pfoor of Stateで正当性が決まる子ブロックチェーンである”Zones”を持っている。子ブロックチェーンの構造と類似点が見受けられる。しかし、Plasmaは子チェーンでstateを履行する為のfraud proofsに依拠しており、多くのチェーンに適応することができる。CosmosのPfoof of Stake構造はCosmos Zoneの検証者を含め2/3が正直な検証者であるという想定でなりたっている。
+
+
+
+
+4.8 Polkadot Polkadot[19] also constructs a structure for a hierarchy of blockchains. There is some similarity with the design of Polkadot. Instead of a structure with ”fishermen” validators ensuring block accuracy, we construct a series of child blockchains which enforce state via merkle proofs. The Polkadot construction is reliant on the child blockchains (”parachains”) state and information availability being enforced by the fishermen. 16 
+4.8 Polkadot Polkadot[19] もまたブロックチェーンの階層構造を形成している。これは、Polkadotのデザインと幾つかの類似点がある。”fishermen” (Polkadotのwhitepaper参照）のバリデーターがブロックの正当性を保証する構造の代わりに、マークル証明を経由してstateを履行する子ブロックチェーンを複数構成する。Polkadotの構成は子ブロックチェーン（”parachains”）のstateとfishermenによって履行される情報の可用性に依存している。
+
+4.9 Lumino Lumino[20] is a design for an EVM contract with compressed updates on the blockchain. This allows participants to only update minimal committed state. Plasma’s output management design takes things further with only a single bit denoting a particular output. This allows for rapid, low cost coordination around mass withdrawal in the event of child Plasma chain failure.
+4.9 Lumino Lumino[20]はブロックチェーンにアップデートするEVMコントラクト用に設計されたものである。これは参加者が最小限のコミットstateを更新するだけでよくなっている。Plasmaのアウトプットマネジメント設計はtakes things further with only a single bit denoting a particular output. これは迅速でコスト安な子Plasmaチェーン上での引き出しを可能にする。
+
+
+

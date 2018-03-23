@@ -1,0 +1,78 @@
+1 Scalable Multi-Party Computation 
+1 スケーラブルなマルチパーティ計算
+
+With blockchains, the solution for enforcing correctness has generally been having every participant validate the chain themselves. 
+
+一般的に、ブロックチェーンにおいて、正確さを強制するための解決策は、すべての参加者がチェーン自体を検証していることである。
+
+To accept a new block requires one to fully validate the block to ensure correctness.
+
+新しいブロックを受け入れるには、正確さを保証するために、完全にブロックを検証する必要がある。
+
+Many efforts to scale blockchain transactional capacity (e.g. Lightning Network[1]) requires using time commitments to build a fidelity bond, (an assert/challenge agreement) so that the asserted data must be subject to a dispute period for participants on the blockchain to enforce the state. 
+
+ブロックチェーントランザクションの容量を拡張するための、多くの努力（例えば、ライトニングネットワーク[1]）は、忠実なボンド（アサート/チャレンジ契約）を構築するために、タイムコミッティーを使用する必要があり、そのため、状態を強制するために、アサートされたデータは、ブロックチェーンの参加者のための紛争期間の対象でなければならない。
+
+This assert/challenge construction allows one to assert a particular state is correct, and if the value is incorrect, then a dispute period exists where another observer can provide a proof challenging that assertion before a certain agreed time. 
+
+このアサート/チャレンジの設計は、1つの特定の状態が正しいことを主張することができ、もしその値が正しくない場合、一定の合意時間の前に、別の観察者がその主張に挑戦証拠を提供できる、紛争期間が存在する。
+
+In the event of fraudulent or faulty behavior, the blockchain can then penalize the faulty actor. 
+
+詐欺や障害のある行動が発生した場合には、ブロックチェーンは、障害のある行動者を罰することができる。
+
+This creates a mechanism for participants to be encouraged to enforce if-and-only-if the incorrect state is asserted. 
+
+これは、もし誤った状態がアサートされた場合にのみ、強制することが奨励される、参加者のためのメカニズムを作っている。
+
+By having this assert/challenge-proof construction, interested participants can be able to assert ground truths to non-interested participants on the root blockchain (e.g. Ethereum[2][3]).
+
+このアサート/チャレンジ証明構造を有することにより、当事者は、ルートチェーン上（例えばイーサリアム[2] [3]）の非当事者にグラウンドトゥルースを主張することができる。
+
+This structure can be used not only for payments, but extended to computation itself so that the blockchain is the adjudication layer for contracts.
+
+アサート/チャレンジ証明構造は、支払いのために使用されるだけでなく、ブロックチェーンがコントラクトの裁定層になるための、計算自体の拡張に使用することができる。
+
+However, the presumption would be that all parties are participants in validating the computation. 
+
+しかし、仮定は、すべての当事者が、計算の検証の参加者であるということである。
+
+In Lightning Network, for example, the construction makes it so that one can establish commitments to computing contract state (e.g. with pre-signed tree of multisignature transactions of conditional state). 
+
+例えば、ライトニングネットワークでは、すべての当事者が計算の検証の参加者であり、そのためコントラクトの状態を計算する約束を確立できる。（例、条件付き状態の、マルチシグネチャ取引の、事前に署名されたツリーと共に）
+
+These constructions allow for highly powerful computation at scale, however there are some issues which require the summation of a lot of external state (i.e. summation of entire systems/markets, computation of a large amount of shared/incomplete data, large number of contributors). 
+
+これらの構造は、スケールで非常に強力な計算を可能にするが、しかしながら、外部の状態の多くの合計値/マークル値（全体のシステム/市場、シャードされた/不完全な大量のデータの計算、多くの貢献者の合計値）を必要とするという、いくつかの問題がある。
+
+This form of commitment to multiparty off-chain state (”state channels”[4]) requires participants to fully validate the computation, or else there are significant amount of trust established in the computation itself, even in single-round games. 
+
+マルチパーティーオフチェーン状態への約束のこの形式（ステートチャンネル[4]）は、完全に計算を検証するための参加者、もしくは計算自体に確立されたかなりの量の信頼、またはシングルラウンドのゲーム、を必要とする。
+
+Additionally, there is usually a presumption of ”rounds” whereby the execution path must be completely unrolled before contract initiation, which gives participants the opportunity to exit and force expensive computation on-chain (as it is not possible to prove which party is halting). 
+
+また、通常は”ラウンド”の仮定があることにより、コントラクトの開始の前に、実行パスが完全にアンロールされなければならず、参加者にExitとオンチェーンでの高価な計算を強制する機会を与える。（どのパーティーが停止されているかを証明することはできない）
+
+
+Instead, we seek to design a system whereby computation can occur off-blockchain but ultimately enforcible on-chain which is scalable to billions of computations per second with minimal on-chain updates. 
+
+その代わりに、我々は、オフチェーンで、しかし最終的には、最小限のオンチェーンの更新とともに、毎秒数十億の計算までスケーラブルである強制的なオンチェーンで、計算が可能になるシステムを設計しようとする。
+
+These state updates occur across an autonomous set of proofof-stake validators 
+who are incentivized towards correct behavior enforced by fraud proofs, which allow for computation to occur 
+without a single actor being able to easily halt the computation service. 
+
+これらの状態の更新は、詐欺の証明によって強制される、正しい行動に向けてインセンティブされた、Proof of Stakeの承認者の自律型セットを横断的に発生させる、これは簡単に計算サービスを停止できる単一の行動者なしに、計算が起こるの許可する。
+
+
+This needs to be able to minimize issues around the data availability problem (i.e. block withholding), minimizing the state updates in the root blockchain necessary in the event of byzantine actors to prevent risk-discounted transaction fees on the root chain, and a mechanism to enforce state changes. 
+
+これは、データ可用性の問題（すなわちblock withholding）の周りの課題を最小限に抑えること、ルートチェーン上のリスクディスカウンティッドな取引手数料を防ぐ、ビザンチンな行動の際に必要な、ルートチェーン上の状態の更新を最小限に抑えること、また状態の変更を強制するためのメカニズムを必要とする。
+
+
+
+
+
+Similar to the Lightning Network, Plasma is a series of contracts which runs on top of an existing blockchain to ensure enforcement while ensuring that one is able to hold funds 2 in a contract state with net settlement/withdrawal at a later date. 
+
+ライトニングネットワークと同様に、プラズマは、後日のネット決済/引出とともに、コントラクトの状態の中の、資金2を保持することができることを保証しながら執行を確保するための、既存のブロックチェーン上で動作する、一つの契約のシリーズである。
