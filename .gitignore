@@ -58,4 +58,7 @@ typings/
 .env
 
 # Mac finder
-.DS_Store
+.DS_Store`
+
+# LaTeX
+texput.log
