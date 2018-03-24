@@ -1,4 +1,4 @@
-Plasma 13章 Conclusion and Summary
+\section{結論と要約}
 
 
 Plasmaはデータを圧縮しながら情報の可用性を保証することに第一のフォーカスを置いて設計された（とくにblock withholding攻撃に対して）。

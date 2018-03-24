@@ -1,4 +1,4 @@
-1 スケーラブルなマルチパーティ計算
+\section{スケーラブルなマルチパーティ計算}
 
 一般的に、ブロックチェーンにおいて、正確さを強制するための解決策は、すべての参加者がチェーン自体を検証していることである。
 
@@ -36,7 +36,5 @@
 
 
 
-
-Similar to the Lightning Network, Plasma is a series of contracts which runs on top of an existing blockchain to ensure enforcement while ensuring that one is able to hold funds 2 in a contract state with net settlement/withdrawal at a later date. 
 
 ライトニングネットワークと同様に、プラズマは、後日のネット決済/引出とともに、コントラクトの状態の中の、資金2を保持することができることを保証しながら執行を確保するための、既存のブロックチェーン上で動作する、一つの契約のシリーズである。

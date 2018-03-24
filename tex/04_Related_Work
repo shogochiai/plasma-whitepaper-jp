@@ -1,11 +1,11 @@
-4 関連プロジェクト
+\section{関連プロジェクト}
 
 幾つかの関連プロジェクトはproof of computation用に、簡略化されたメルカトルツリーを提案している。しかし、この提案は主に、経済的にインセンティブ設計された持続的なシャードチェーングループを経由したプロトコルによりデータの可用性と不正検知のコストを最小にすることである。
 
 
 他の関連プロジェクトは子ブロックチェーンのシステムを提案した。しかし、アプローチ方法に大きな乖離があった。Plasmaは子チェーンを 履行する為にmerkleized proof を使っているのだ。
 
-4.1 TrueBit
+\subsection{TrueBit}
 
 PlasmaはTrueBitの不正検知システムと似た類似性を持っている。
 
@@ -23,6 +23,7 @@ PlasmaがTrueBit上に構築している主な要素は、共有されたstate�
 
 私達はまた、オフチェーンを経由して計算を実行することでオンチェーンでの計算量の問題を緩和するこころみを行っている。
 
+\subsection{ブロックチェーンのSharding}
 ブロックチェーン上でシャーディングをする現在の試みの多くは、似た技術を用い、似た目的を持っている。例：Ethereum Sharding
 
 これは上位層レイヤーで互換性があるかもしれない。
@@ -31,7 +32,9 @@ PlasmaがTrueBit上に構築している主な要素は、共有されたstate�
 
 これはまた、イーサリアムや他の安定しているブロックチェーンで基本的な作業を行う為に、コンセンサスの変更が必要なしに異なるシャーディング技術がテスト可能である。
 
-4.3 結合しているプラズマサイドチェーンは正直な一連の活動や、チェーン上でstateを履行する完全に信頼された参加者に依存しないので、単体のサイドチェーンではない。
+
+\subsection{Federatedなサイドチェーン}
+結合しているプラズマサイドチェーンは正直な一連の活動や、チェーン上でstateを履行する完全に信頼された参加者に依存しないので、単体のサイドチェーンではない
 
 Plasmaはまた他のブロクチェーンで同じコインやトークンを使用することを可能にする。しかし、それはもし、fraud proof が利用可能なら履行可能な立証である。
 
@@ -39,19 +42,21 @@ Plasmaは参加者の強力な強力に依存していない。それらの参�
 
 Drivechainsはバリデーターが匿名かつランダムでありより分散化されている点を除き結合されたサイドチェーンとにている。
 
-4.4 Merge-Mined Blockchain Examplesは親ブロックチェーン[14]と共存するブロックを作成するNamecoinがある。
+\subsection{マージマイニングされるブロックチェーン}
+例としては親ブロックチェーン[14]と共存するブロックを作成するNamecoinがある
 
 これは従って、ブロックチェーンのフルバリデーションはスケーラビリティー問題に解決策を提示しないと想定されている。
 
-拡張されたブロックは主要なブロックチェーンとmerge-mined chain(with an enforcement mechanism of the full set of miners as a consensus rule on the root chain)の間で資金のやり取りをするmerge-mined chainの一例である。
+拡張されたブロックは主要なブロックチェーンとmerge\-mined chain(with an enforcement mechanism of the full set of miners as a consensus rule on the root chain)の間で資金のやり取りをするmerge\-mined chainの一例である。
 
 
-Merge-mined chainsは、新しいコンセンサスのルールと所属しているチェーン（だけ）の正当性を確認するユーザーの選出するが、マイナーと検証者は全てを検証しないといけない。
+Merge\-mined chainsは、新しいコンセンサスのルールと所属しているチェーン（だけ）の正当性を確認するユーザーの選出するが、マイナーと検証者は全てを検証しないといけない。
 
 
 Plasmaのゴールは、ユーザーとマイナーだけが彼ら自身が関与しているチェーンを検証することができることを確立することである。 
 
-4.5 Treechains Treechainsは子ブロックをProof of Workを使って検証できるようなツリー構造のブロックチェーンを提示している。
+\subsection{Treechains}
+Treechainsは子ブロックをProof of Workを使って検証できるようなツリー構造のブロックチェーンを提示している。
 
 ルートチェーンは全ての子ブロックチェーンのproof of workを要約したものである。 
 
@@ -65,30 +70,34 @@ Plasmaのゴールは、ユーザーとマイナーだけが彼ら自身が関�
  
 同様の活動が、tree formationのブロックの正当性を証明する作業にも見受けられる。
 
-4.6 zk-SNARKsとzk-STARKsの証明者と承認者がリアルタイムで互いにやり取りをすることのない証明は処理性能の向上に多大な恩恵がある。
+\subsection{zk\-SNARKsとzk\-STARKs}
+証明者と承認者がリアルタイムで互いにやり取りをすることのない証明は処理性能の向上に多大な恩恵がある。
 
-zk-SNARKs/STARKs と証明者と承認者がリアルタイムで互いにやり取りをすることのないコンパクトな証明はPlasmaにメリットがある。
+zk\-SNARKs/STARKs と証明者と承認者がリアルタイムで互いにやり取りをすることのないコンパクトな証明はPlasmaにメリットがある。
 
 証明が、マークル木の計算結果に伴って提供される。それに加えて、子Plasmaチェーンで少額の量を保有している際に、systemic attacksの可能性を減らす恩恵もある。MapReduce functionality用にSNARKsは既に研究が行われている。[17] そして私達はこれが研究を加速させ、Plasmaがいくつかのブロックチェーン上で順序付け可能で履行可能な証明を作ることによってこの機能を拡張させることを期待している。
 
 さらに、より早く同期とチェーン自体の検証作業を行うことで、計算量の証明にも恩恵がある。
 
-zk-SNARKsはデータの可用性の問題をとかないことは注意しないといけない。計算と必要なデータ量を減らすだけである。
+zk\-SNARKsはデータの可用性の問題をとかないことは注意しないといけない。計算と必要なデータ量を減らすだけである。
 
 これは特に、実時間性に問題を抱える仕組みを置き換えたり補完するのに有効である。
 
- zk-SNARKsは高度な安全性を確立するのに有益である。セキュリティの最終レイヤーが好みの暗号を使用していないブロックチェーンでは、セカンドレイヤーにはzk-SNARKsが使える。そしてファーストレイヤーには信頼されたハードウェアがあればよい。
+ zk\-SNARKsは高度な安全性を確立するのに有益である。セキュリティの最終レイヤーが好みの暗号を使用していないブロックチェーンでは、セカンドレイヤーにはzk\-SNARKsが使える。そしてファーストレイヤーには信頼されたハードウェアがあればよい。
 
-Plasmaチェーンからの引き出しは少額であっても、bitmapを必要としないメリットがあるzk-SNARKsによって守られる。
+Plasmaチェーンからの引き出しは少額であっても、bitmapを必要としないメリットがあるzk\-SNARKsによって守られる。
 
-4.7 Cosmos/Tendermint Cosmos[18] はCosmos “Hub”でブロックチェーンが繋がり、Pfoor of Stateで正当性が決まる子ブロックチェーンである”Zones”を持っている。子ブロックチェーンの構造と類似点が見受けられる。しかし、Plasmaは子チェーンでstateを履行する為のfraud proofsに依拠しており、多くのチェーンに適応することができる。CosmosのPfoof of Stake構造はCosmos Zoneの検証者を含め2/3が正直な検証者であるという想定でなりたっている。
+\subsection{Cosmos/Tendermint}
+Cosmos[18] はCosmos “Hub”でブロックチェーンが繋がり、Pfoor of Stateで正当性が決まる子ブロックチェーンである”Zones”を持っている。子ブロックチェーンの構造と類似点が見受けられる。しかし、Plasmaは子チェーンでstateを履行する為のfraud proofsに依拠しており、多くのチェーンに適応することができる。CosmosのPfoof of Stake構造はCosmos Zoneの検証者を含め2/3が正直な検証者であるという想定でなりたっている。
 
 
 
 
-4.8 Polkadot Polkadot[19] もまたブロックチェーンの階層構造を形成している。これは、Polkadotのデザインと幾つかの類似点がある。”fishermen” (Polkadotのwhitepaper参照）のバリデーターがブロックの正当性を保証する構造の代わりに、マークル証明を経由してstateを履行する子ブロックチェーンを複数構成する。Polkadotの構成は子ブロックチェーン（”parachains”）のstateとfishermenによって履行される情報の可用性に依存している。
+\subsection{Polkadot}
+Polkadot[19] もまたブロックチェーンの階層構造を形成している。これは、Polkadotのデザインと幾つかの類似点がある。”fishermen” (Polkadotのwhitepaper参照）のバリデーターがブロックの正当性を保証する構造の代わりに、マークル証明を経由してstateを履行する子ブロックチェーンを複数構成する。Polkadotの構成は子ブロックチェーン（”parachains”）のstateとfishermenによって履行される情報の可用性に依存している。
 
-4.9 Lumino Lumino[20]はブロックチェーンにアップデートするEVMコントラクト用に設計されたものである。これは参加者が最小限のコミットstateを更新するだけでよくなっている。Plasmaのアウトプットマネジメント設計はtakes things further with only a single bit denoting a particular output. これは迅速でコスト安な子Plasmaチェーン上での引き出しを可能にする。
+\subsection{Lumino}
+Lumino[20]はブロックチェーンにアップデートするEVMコントラクト用に設計されたものである。これは参加者が最小限のコミットstateを更新するだけでよくなっている。Plasmaのアウトプットマネジメント設計はtakes things further with only a single bit denoting a particular output. これは迅速でコスト安な子Plasmaチェーン上での引き出しを可能にする。
 
 
 

@@ -62,3 +62,6 @@ typings/
 
 # LaTeX
 texput.log
+
+# Original file
+.bulk

@@ -1,12 +1,17 @@
 const latex = require('node-latex')
+const LATEX_END = '\\end{document}'
 const fs = require('fs')
 
-let list = fs.readdirSync('./pdf')
-list = list.map(f=>{
+let listTex = fs.readdirSync('./tex')
+let bulk = listTex.map(n=> fs.readFileSync('./tex/'+n) ).join("\n") + "\n" + LATEX_END
+fs.writeFileSync('.bulk', bulk)
+
+let listPdf = fs.readdirSync('./pdf')
+listPdf = listPdf.map(f=>{
   let arr = f.match(/\d+/)
   return arr ? parseInt(arr[0]) : 0
 })
-let max = Math.max(...list)
+let max = Math.max(...listPdf)
 let incrementedName = `pdf/Plasmaホワイトペーパー_第${max+1}版.pdf`
 let latestName = `pdf/Plasmaホワイトペーパー_最新版.pdf`
 
@@ -21,8 +26,7 @@ try {
   console.log("\nNo latest version of pdf\n")
 }
 
-
-const input = fs.createReadStream('tex/00_Abstract')
+const input = fs.createReadStream('.bulk')
 const output = fs.createWriteStream(latestName)
 const pdf = latex(input)
 pdf.pipe(output)
