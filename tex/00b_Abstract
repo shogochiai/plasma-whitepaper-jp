@@ -1,23 +1,3 @@
-\documentclass[12pt,twoside,a4paper,pdflatex,ja=standard]{bxjsarticle}
-\usepackage[utf8]{inputenc}
- 
-\title{Plasma}
-\subtitle{スケーラブルな自律型スマートコントラクト}
-\author{ジョセフ・プーン joseph@lightning.network\\ヴィタリック・ブテリン vitalik@ethereum.org}
-\date{2017年8月11日}
- 
-\begin{document}
- 
-\maketitle
-{\centering\scriptsize
-  ワーキングドラフト https://plasma.io\par
-}
-
-
- 
-
-
-
 \begin{abstract}
 
 Plasmaは、世界中の分散型金融アプリケーションのほとんどを扱えるたったひとつのブロックチェーンを可能にする、秒あたりの状態の更新を多くの量（潜在的に十億）までスケールができるスマートコントラクトの強制執行と、インセンティブのために提案されたフレームワークである。これらのスマートコントラクトは、トランザクションの状態遷移を強制する基礎となるブロックチェーン（例：Ethereum）に最終的に依存するネットワークの取引手数料を介して、自律的に動作を継続する動機づけがされている。
@@ -33,5 +13,3 @@ Plasmaは、設計の二つの主要部分から構成されています：す�
 障害のない状態の間、Rootchain（すなわちEthereum）に、定期的にマークル値だけがブロードキャストされているため、これは非常にスケーラブルで、低コストな取引および計算を可能にすることができる。Plasmaは、高いスケールで持続的に動作する、分散型アプリケーションを可能にする。
 
 \end{abstract}
-
-\end{document}

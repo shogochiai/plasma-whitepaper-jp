@@ -1,0 +1,17 @@
+\documentclass[10.5pt,twoside,a4paper,pdflatex,ja=standard]{bxjsarticle}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\graphicspath{ {\string./img/} }
+\usepackage[outdir=./img/]{epstopdf}
+
+\title{Plasma}
+\subtitle{スケーラブルな自律型スマートコントラクト}
+\author{ジョセフ・プーン joseph@lightning.network\\ヴィタリック・ブテリン vitalik@ethereum.org}
+\date{2017年8月11日}
+ 
+\begin{document}
+ 
+\maketitle
+{\centering\scriptsize
+  ワーキングドラフト https://plasma.io\par
+}

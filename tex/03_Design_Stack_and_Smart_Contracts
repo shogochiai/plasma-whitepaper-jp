@@ -1,4 +1,4 @@
-3 デザインスタックとスマートコントラクト
+\section{デザインスタックとスマートコントラクト}
 
 歴史的に、多くの人々はブロックチェーンが決済システムとしてトランザクションの支払いに最も適したものであると信じている。
 
@@ -19,7 +19,7 @@ Plasmaは、トランザクションが子チェーンでファイナリティ�
 
 
 
-チャネルはローカルで迅速に決済とコントラクト(enforcible on-chain)のファイナリティを確保することができる必要がある。
+チャネルはローカルで迅速に決済とコントラクト(enforcible on\-chain)のファイナリティを確保することができる必要がある。
 
 スマートコントラクトでは、”free option problem” の問題がある。スマートコントラクトの受信者（2番目もしくは最後）がコントラクトを実行するためにそれに署名し拡散する必要がある。ーその間に、もしそのコントラクトが受信者によって関心のあるものでなければ、受信者はコントラクトをfree optionとして扱い、署名を拒否することができる可能性がある。
 
@@ -39,7 +39,14 @@ Lightning(Plasma上のLightningも含む）は許容範囲内のローカライ�
 Plasmaは、最小のルートチェーンのState commitmentsによるアップデートができるので、上記のユースケースのように、LightningはPlasma上の迅速なフィナンシャル決済/取引の主要なインターフェイスレイヤーになるかもしれない。
 
 
-図9 : コントラクトと決済を判定するレイヤー、ルートブロックチェーンについて。
+%\ref{fig:hamu}
+\begin{figure}[htbp]
+  \begin{center}
+    %\includegraphics[clip,width=7.0cm]{./img/dummy.eps}
+    \caption{コントラクトと決済を判定するレイヤー、ルートブロックチェーンについて}
+    \label{fig:a}
+  \end{center}
+\end{figure}
 
 コントラクトそれ自体はルートブロックチェーンに存在する。
 
@@ -52,7 +59,7 @@ Plasmaはブロックチェーン上で最小トランザクション数のス�
 Lightning Networkの上層レイヤーで瞬時の決済がPlasmaとブロックチェーン間で行われる。
 
 
-3.1 最も重要なShardingの問題は情報である。
+\subsection{最も重要なShardingの問題は情報である}
 
 分割されたデータセットには、各々のShardで情報を公開することを拒否する重大なリスクがある。
 
@@ -60,12 +67,13 @@ Lightning Networkの上層レイヤーで瞬時の決済がPlasmaとブロック
 
 私達は3つの戦略でこの問題を解こうとしています。
 
-1.ブロックの伝播を促進する新しいProof-of-Stakeのメカニズム。根底にあるメカニズムは現在のインセンティブの機能性に完全に依拠していない。これは誤った行動を劇的に減少させる。
+\begin{enumerate}
+  \item ブロックの伝播を促進する新しいProof\-of\-Stakeのメカニズム。根底にあるメカニズムは現在のインセンティブの機能性に完全に依拠していない。これは誤った行動を劇的に減少させる。
 
-2.  Significant withdrawal delays which allow for accurate withdrawal proofs. 
-Individuals don’t need to watch the blockchain that frequently and fraud on higher plasma chains can be prevented on the root blockchain by any honest actor on the same plasma chain as the user. ブロックを隠し持っている場合には、Plasmaチェーンは即座に資金を凍結し、攻撃者が不正な証拠を提出するのを妨げる。固定されている資金よりも多くの額を攻撃者が引き出そうとした際には、攻撃しているplasmaチェーンはデポジットを失う。
+  \item Significant withdrawal delays which allow for accurate withdrawal proofs. Individuals don’t need to watch the blockchain that frequently and fraud on higher plasma chains can be prevented on the root blockchain by any honest actor on the same plasma chain as the user. ブロックを隠し持っている場合には、Plasmaチェーンは即座に資金を凍結し、攻撃者が不正な証拠を提出するのを妨げる。固定されている資金よりも多くの額を攻撃者が引き出そうとした際には、攻撃しているplasmaチェーンはデポジットを失う。
 
-3. どの親チェーンにもトランザクションを伝播できる子チェーンを作る。これによって、ネットワークの参加者はトランザクションを深い子チェーンへ伝播したいと思うようになる。これは、高い手数料を払うことのできないルートブロックチェーン上の少額の取引に経済効率性を創り出す。従って、流動資金は少額となる。したがって、参加者は多くの価値を代表する子チェーンを作ることを促進される。注意しなければ行けないのは、とても少量の額をもっている個人にとっていくつかのチェーン選択に関する前提が存在しているということで、
+  \item どの親チェーンにもトランザクションを伝播できる子チェーンを作る。これによって、ネットワークの参加者はトランザクションを深い子チェーンへ伝播したいと思うようになる。これは、高い手数料を払うことのできないルートブロックチェーン上の少額の取引に経済効率性を創り出す。従って、流動資金は少額となる。したがって、参加者は多くの価値を代表する子チェーンを作ることを促進される。注意しなければ行けないのは、とても少量の額をもっている個人にとっていくつかのチェーン選択に関する前提が存在しているということで、
+\end{enumerate}
 
 このセキュリティモデルがPlasmaチェーンの鍵である。
 

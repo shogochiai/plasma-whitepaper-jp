@@ -1,4 +1,4 @@
-Plasma 12章 Future Research
+\section{今後の研究余地}
 
 
 以下ではセキュリティに関する補助的な将来の研究テーマに関して言及する。"Generalized Recursive SNARKs/STARKs" が現在の研究領域であり、これはexitトランザクションのセキュリティを圧倒的に向上させることができる。これはさらなる防衛力を期待することができ、したがって最終防衛ラインは異議申し立ての証明を可能にする非中央集権exitメカニズムになるだろう。第一防衛ラインは新規なcryptographyとセキュアなハードウェア装置になる。さらなるcryptographyのペア化や、準同型暗号（HE：Homomorphic Encryption）に関する開発も助けになるだろう。
