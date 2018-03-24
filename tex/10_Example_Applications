@@ -31,9 +31,9 @@
 
 特定の投稿を見るために、ユーザーはルートチェーンのコミットメントを検証する。そして、
 
-Connects to a DHT network to discover nodes on the subreddit, downloads the chaintip (plus back n blocks to verify) of the subreddit and view list of posts, download the state trie as a light client and raw data for the relevant post with comments. 
+DHT(DecentrarizedHashTable)ネットワークに接続してsubreddit上のノードを発見し、subredditの投稿のリストを表示するChaintip（確認のためにn個前のブロックを加えたもの）をダウンロードし、軽量クライアントとしてステート・マークルツリーとrawデータ(ポストに関連するコメント付き)をダウンロードする。
 
-Users only need to observe parts of the Plasma chains which are relevant only to themselves (download only the posts and 40 subreddits relevant to themselves). 
+ユーザーは自分自身にのみ関連するプラズマチェーンの一部を観察する必要がある（自分自身に関連する投稿と40のsubredditのみをダウンロードする）。
 
 これはブロックチェーン上で計算処理を行うデータストレージの簡単な例である。
 
