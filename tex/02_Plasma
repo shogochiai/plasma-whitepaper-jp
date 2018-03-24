@@ -1,55 +1,29 @@
 2 Plasma 
 
-Plasma is a way to do scalable computation on the blockchain with the structure of creating economic incentives to autonomously and persistently operate the chain without active state transition management by the contract creator. 
-
 プラズマは、コントラクト作成者がアクティブな状態遷移管理をせずに、自律的かつ持続的にチェーンを運営する経済的インセンティブを作成するための構造をもった、ブロックチェーンでスケーラブルな計算を行う方法である。
-
-The nodes themselves are incentivized to operate the chain. 
 
 ノード自体はチェーンを運営するようにインセンティブ化されている。
 
-Additionally, significant scalability is achieved by minimizing the funds represented in a spend from a contract to a single bit in a bitmap, so that one transaction and signature represents a payment coalesced with many participants. 
-
 さらに、ビットマップ内の単一のビットとのコントラクトからの支出として表される資金を最小限に抑えることによって、重要なスケーラビリティが達成されます、そのため、1つのトランザクションと署名が、多くの参加者と合体した支払いを表す。
 
-We combine this with a MapReduce[5] framework to be able to construct scalable computation enforced by bonded smart contracts. 
-
 私たちは、結合したスマートコントラクトによって強制された、スケーラブルな計算を構築することができるようにするために、MapReduce [5]のフレームワークとこれを組み合わせる。
-
-This construction allows one to be able to have externalized parties hold funds and compute contracts on one’s behalf similar to a miner, but Plasma instead runs on top of an existing blockchain so that one does not need to create transactions on the underlying chain for every state update (including adding new users’ ledger entries), with minimal data on-chain for coalesced state updates.
 
 この構造により、外部化された当事者は、マイナーに似て、資金を保持して契約を計算することができるが、統合された状態の更新のための最小限のデータをオンチェーンに持ちながら
 、Plasmaは既存のブロックチェーンの上で実行されるため、すべての状態更新のために基になるチェーンにトランザクションを作成する必要はない。（新規ユーザーの元帳エントリの追加を含む）
 
- Figure 1: Anyone can create a custom Plasma chain for smart contract scalability for many different use cases. 
-
 図1：誰もがさまざまなユースケースのためのスマート契約のスケーラビリティのためのカスタムPlasmaチェーンを作成することができる。
-
-Plasma is a series of smart contracts which allows for many blockchains within a root blockchain.
 
 プラズマは、ルートチェーン内に多くのブロックチェーンをおくことを可能にしたスマートコントラクトのシリーズである。
 
-The root blockchain enforces the state in the Plasma chain. 
-
 ルートチェーンはプラズマチェーンの状態を強制する。
-
-The root chain is the enforcer of all computation globally, but is only computed and penalized if there is proof of fraud. 
 
 ルートチェーンは、世界的にすべての計算の執行者であるが、詐欺の証拠がある場合にのみ、計算され、ペナルティが課される。
 
-Many Plasma blockchains can co-exist with their own business logic and smart contract terms. 
-
 多くのPlasmaブロックチェーンは、独自のビジネスロジックとスマートコントラクトの条項と共存することができる。
-
-In Ethereum, Plasma would be composed of EVM smart contracts running directly on Ethereum, but only processing tiny commitments which can represent an incredibly large amount of computation and financial ledger entries in non-Byzantine cases. 
 
 イーサリアムでは、プラズマはイーサリアムで直接実行されるEVMスマートコントラクトで構成されるが、non-Byzantineの場合には、非常に大量の計算と財務会計記録を表すことができる小さなコミットメントしか処理しない。
 
-Plasma is composed of five key components: 
-
 プラズマは、5つの主要コンポーネントで構成される。
-
-An incentive layer for persistently computing contracts in an economically efficient manner, structure for arranging child chains in a tree format to maximize low-cost efficiency and net-settlement of transactions, a MapReduce computing framework for constructing fraud proofs of state transitions within these nested chains to be compatible with the tree structure while reframing the state transitions to be highly scalable, a consensus mechanism which is dependent upon the root blockchain which attempts to replicate the results of the Nakamoto[6] consensus incentives, and a bitmap-UTXO commitment structure for ensuring accurate state transitions off the root 3 blockchain while minimizing mass-exit costs. 
 
 経済的に効率的な方法で契約を永続的に計算するためのインセンティブ層、
 低コストの効率とトランザクションのネット決済を最大限にするための、ツリー形式で子チェーンを配置するための構造、
@@ -57,216 +31,116 @@ An incentive layer for persistently computing contracts in an economically effic
 Nakamoto [6]コンセンサスインセンティブの結果を再現しようとするルートブロックチェインに依存するコンセンサスメカニズム
 ルートブロックチェーンからの正確な状態遷移を確実にし、mass-exitコストを最小限に抑えるためのビットマップ - UTXOコミットメント構造。
 
-
-Allowing for exits in data unavailability or other Byzantine behavior is one of the key design points in Plasma’s operation. 
-
 データの利用不可能性やその他のビザンチンな行動の終了を可能にすることは、Plasmaの運用における重要な設計ポイントの1つである。
 
-2.1 The Plasma Blockchain, or Externalized Multiparty Channels
 
 2.1 Plasmaブロックチェーン、または外部化された複数のチャンネル
 
-We propose a method whereby multiparty off-chain channels can hold state on behalf of others. 
-
 我々は、マルチパーティーオフチェーンチャネルが他者のために状態を保持できる方法を提案する。
-
-We call this framework a Plasma blockchain. 
 
 私たちはこのフレームワークをPlasmaブロックチェーンと名付ける。
 
-For funds held in the Plasma chain, this allows for deposit and withdrawal of funds into the Plasma chain, with state transitions enforced by fraud proofs. 
-
 Plasmaチェーンで保有されている資金については、これにより、Plasmaチェーンへの資金の預金および払戻しが可能になり、詐欺の証拠によって状態の移行が強制される。
 
-This allows for enforcible state and fungibility since one is able to deposit and withdraw, with accounting of the Plasma block matching the funds held in the root chain 
-(Plasma is not designed to be compatible with fractional reserve banking designs). 
 これは、ルートチェーンに保持されている資金と一致するPlasmaブロックを考慮して、預金と出金が可能であるため、強制的な状態と代替性を可能にする（Plasmaはフラクショナルリザーブバンク設計に適合するようには設計されていない）。
-
-Figure 2: Plasma blockchains are a chain within a blockchain. 
 
 図2: Plasmaブロックチェーンは、ブロックチェーン内のチェーンである。
 
-The system is enforced by bonded fraud proofs. 
-
 このシステムは、詐欺の拘束証明によって強制される。
-
-The Plasma blockchain does not disclose the contents of the blockchain on the root chain (e.g. Ethereum). 
 
 Plasmaブロックチェーンは、ルートチェーン上（例、イーサリアム）のブロックチェーンの内容物を明らかにしていない。
 
-Instead, blockheader hashes are submitted on the root chain and if there is proof of fraud submitted on the root chain, then the block is rolled back and the block creator is penalized. 
-
 その代わりに、ブロックヘッダハッシュがルートチェーン上に提出され、ルートチェインに詐欺が提出されたことが証明された場合、ブロックはロールバックされ、ブロック作成者にペナルティが課せられる。
-
-This is very efficient, as many state updates are represented by a single hash (plus some small associated data). 
 
 これは非常に効率的で、多くの状態の更新は、単一のハッシュ（いくつかの小さな関連データ）で表される。
 
-This update can represent balances which are not represented on the root blockchain (Alice does not have her ledger balance on the root chain, her ledger is on the Plasma chain, and the balance in the root chain is representing a smart contract enforcing the Plasma chain itself). 
-
 この更新は、ルートブロックチェーンには表示されない残高を表すことができる（アリスはルートチェーン上の元帳残高を持たず、元帳はPlasmaチェーン上にあり、ルートチェーン内の残高はPlasmaチェーン自体を強制するスマートコントラクトを表している。）
 
-Gray items are old blocks, black is the most recent block that has been propagated and committed on the root chain. 
-
 灰色のアイテムは古いブロックであり、黒はルートチェーン上で伝播されコミットされた最新のブロックである。
-
-Incredibly high amount of transactions can be committed on this Plasma chain with minimal data hitting the root blockchain. 
 
 信じられないほど大量のトランザクションがこのPlasmaチェーンでコミットされ、ルートブロックチェーンに入るデータは最小限に抑えられる。
 
 
-Any participant can transfer funds to anyone, including transfers to participants not in the existing set of participants. 
-
 参加者は、既存の参加者ではない参加者への転送を含む、誰にでも資金を移転することができる。
-
-These transfers can pay into and withdraw (with some time delay and proofs) funds in the root blockchain’s native coin(s)/token(s). 
 
 これらの転送は、ルートブロックチェーンの本来のコイン/トークンに資金を払い込んで（多少の時間遅延と証拠で）資金を引き出すことができる。
 
-Plasma allows one (or a network of participants in a proof-of-stake network) to be able to manage a blockchain without a full persistent record of the ledger on the root blockchain and without giving custodial trust to the 3rd party or parties. 
-
 Plasmaでは、ルートブロックチェーン上の元帳の完全な永続的な記録なしに、第三者に保管上の信頼を与えることなく、誰か（または、Proof of Stakeの参加者のネットワーク）がブロックチェーンを管理できるようになる。
-
-In the worst case, funds are locked up and time-value is lost with mass-exits on the blockchain. 
 
 最悪の場合、資金はロックされ、time-valueはブロックチェーン上のmass-exitsによって失われる。
 
-We construct a series of fraud proofs as smart contracts[7] on the root blockchain which enforce state in this channel so that attempts at fraud or non-Byzantine behavior can be slashed. 
-
 私たちは、このチャンネルで状態を強制するルートブロックチェーン上のスマートコントラクト[7]として一連の不正防止プルーフを構築し、不正行為または非ビザンチン行為の試みを削ることができる。
 
-These fraud proofs enforce an interactive protocol of fund withdrawals.
-
 これらの詐欺証明は、資金出金のインタラクティブプロトコルを強制する。
-
- Similar to the Lightning Network, when withdrawing funds, the withdrawal requires time to exit. 
 
 ライトニングネットワークと同様に、資金を引き出す際には、Exitには時間が必要である。
 
 
-We construct an interactive game whereby the exiting party attests to a bitmap of participants’ ledger outputs arranged in an UTXO model which requests a withdrawal. 
-
 私たちは、出席者が出金を要求するUTXOモデルに配置された、参加者の元帳OUTPUTのビットマップを証明する、インタラクティブゲームを構築する。
-
-Anyone on the network can submit an alternate *bonded* proof which attests whether any funds have already been spent.
 
 ネットワーク上の誰でも、既に資金が使われているかどうかを証明する代替*bonded*証明書を提出することができる。
 
-In the event this is incorrect, anyone on the network can attest to fraudulent behavior and slash the bonds to roll back the attestation. 
-
 これが間違っている場合、ネットワーク上の誰も不正行為を証明し、認証をロールバックするためにbondsを破棄することができます。
-
-After sufficient time, the second *bonded* round allows for the withdrawal to occur, which is a bond on state *before* a committed timestamp. 
 
 十分な時間が経過すると、2番目の*bonded*ラウンドでは、コミットされたタイムスタンプの*前*の状態のbondである引き出しを行うことができる。
 
-This allows for a withdrawal en masse so that a faulty Plasma chain can be rapidly exited. 
 これは、欠陥のあるPlasmaチェーンが急速に終了するように、一括して取り出すことを可能にする。
 
-In coordinated mass withdrawal events, a participant may be able to exit with less than 2-bits of block space consumed on the parent blockchain (i.e. root Ethereum on-chain in worst case scenarios). 
 調整された大量出金イベントでは、参加者は、親ブロックチェーンで消費されるブロックスペースが2ビット未満で終了することがある（すなわち、ワーストケースのシナリオではオンチェーンのイーサリアム）
 
-In the event of a block withholding attack, participants can rapidly and cheaply do a mass-exit, with substantial cost savings versus other previous off-chain proposals.
 Block withholding攻撃が発生した場合、参加者は迅速かつ安価に大量退出を行うことができ、これまでのオフチェーンの提案と比較して大幅なコスト削減が可能である。
 
-Additionally, this does not place any trust in a coalition of validator nodes (Sidechain Functionaries, Fishermen).
 さらに、これは承認ノードの連合（Sidechain Functionaries、Fishermen）に信頼を置いていない。
 
-Figure 3: Exit of funds in the event of block withholding. 
-図3：Block wtihholdingの場合の資金の出金。
 
-The red block (Block #4) is a block which is withheld and committed on the root chain, but Alice is not able to retrieve Plasma block #4. 
+図3：Block wtihholdingの場合の資金の出金。
 
 赤いブロック（ブロック＃4）は、ルートチェーン上で保留されコミットされたブロックであるが、アリスはプラズマブロック＃4を取得できない。
 
-She exits by broadcasting a proof of funds on the root blockchain and her withdrawal is processed after a delay to allow for disputes. 
-
 彼女はルートチェーンに資金の証拠を伝播することによってExitし、出金は紛争を許容するために遅れて処理される。
-
-Similar to how closing out Lightning is an interactive mechanism between two participants to enable enforcible infinite payments between themselves, this allows for an interactive mechanism between n participants.
 
 ライトニングネットワークを閉じる方法と同様に、2人の参加者間で無制限の支払いを可能にするためのインタラクティブなメカニズムであり、これにより、n人の参加者間のインタラクティブなメカニズムが可能になる。
 
-The primary difference is that not all participants need to be online to update state, and the participants do not need a record of entry on the root blockchain to enable their participation – 
-
 主な違いは、すべての参加者が状態を更新するためにオンラインになる必要はなく、参加者は参加を可能にするためにルートチェーンにエントリの記録を必要としないことである。
-
-one can place funds on Plasma without direct interaction on-chain, with minimal data to confirm transactions when constructing these Plasma chains in a tree format.
 
 これらのPlasmaチェーンを、ツリー形式で構築する際に取引を確認するための最小限のデータで、オン・チェーンで直接的な相互作用なしにPlasmaに資金を置くことができる。
 
-2.2 Enforcible Blockchains in Blockchains
 ブロックチェーンの強制されたブロックチェーン
 
-Figure 4: Plasma composes blockchains in a tree.
 図4：Plasmaはツリー状にブロックチェーンを構成する。
 
 
-Block commitments flow down and exits can be submitted to any parent chain, ultimately being committed to the root blockchain. 
-
 ブロックコミットメントはフローダウンし、終了は任意の親チェーンに提出でき、最終的にルートブロックチェーンにコミットされる。
 
-We construct a mechanism similar to the court system. 
-
 裁判制度と同様の仕組みを構築する。
-
-If Lightning Network uses an adjudication layer for payments which is ultimately enforcible on the root blockchain, we create a system of higher and lower courts to maximize availability and minimize costs in non-Byzantine states. 
 
 ライトニングネットワークが最終的にルートチェーン上で執行可能な支払いのために裁定層を使用する場合、non-Byzantineの状態では可用性を最大限に高め、コストを最小限に抑えるために、裁判所の上層階と下層階のシステムを作成します。
 
 
-If a chain is Byzantine, it has the option of going to any of its parents (including the root blockchain) to continue operation or exit with the current committed state. 
-
 チェーンがByzanitneの場合は、その親（ルートブロックチェーンを含む）のいずれかに行き、現在のコミットされた状態で実行を続行するか終了するかを選択できる。
-
-Instead of enforcement of an incrementing nonce state (via revocations), we construct a system of fraud proofs to enforce balances and state transitions of these chain hierarchies. 
 
 Inctementing-nonce状態（取り消しを介して）を実行する代わりに、これらの連鎖階層の残高と状態遷移を強制する詐欺証明のシステムを構築する。
 
-In effect, we are able to create state transitions which are only periodically committed to parent chains (which then flows to the root blockchain).
-
 実際には、親チェーンに定期的にコミットされるだけの状態遷移を作成することができる。（ルートブロックチェーンに流れる）。
-
-This allows for incredible scale of computation and account state, as we are able to only submit raw data to parent (or root) chain in Byzantine conditions. 
 
 これにより、ビザンチン条件で親（またはルート）チェーンにraw dataを送信することしかできないため、計算量とアカウント状態の驚異的なスケールが可能になる。
 
-Recovery from partially Byzantine conditions are costminimized since one can go to a parent Plasma chain to enforce state. 
-
 ビザンチンの部分的な状態からの復旧は、親プラズマ・チェーンに行って状態を強制することができるため、コストを最小限に抑える。
-
-This child blockchain runs on top of a root blockchain (e.g. Ethereum) and from the root blockchain’s perspective, is only seeing periodic commitments with the tokens bonded in the contract for enforcement of the Proof-of-Stake consensus rules and business logic of the blockchain.
 
 この子ブロックチェーンはルートブロックチェーン（Ethereumなど）の上で実行され、ルートブロックチェーンの観点からは、ブロックチェーンのProof of Stakeコンセンサスルールとビジネスロジックの実施のために契約でトークンが結合された定期的なコミットメントのみが表示される。
 
-This has significant advantages in maximizing block availability and minimizing stake for validation of one’s coins. 
-
 これは、ブロックの可用性を最大化し、コインの承認のためのStakeを最小限に抑える上で重要な利点を有する。
-
-However, since not all data is being propagated to all parties (only those who wish to validate a particular state), parties are responsible for monitoring the particular chain they are interested in periodically to penalize fraud, as well as personally exiting the chain rapidly in the event of block withholding attacks. 
 
 ただし、すべてのデータがすべての関係者に伝播されるわけではないため（特定の状態を検証したい人のみ）、当事者は、彼らが定期的に興味を持っている特定のチェーンを監視し、詐欺行為を罰する責任があり、同様にBlock withholding攻撃の場合には、個人的にチェーンを急速に脱出する。
 
-Figure 5: The faulty blockchain (shaded in red) is routed around by broadcasting a commitment to its parent Plasma/root chain(right dotted blue line). 
-
 図5：障害のあるブロックチェーン（赤で塗りつぶされている）は、その親のPlasma およびルートチェーン（右の点線の青い線）にコミットメントをブロードキャストすることでルーティングができる。
-
-Participants in the 3rd depth Plasma chain do a mass migration to another chain together (left blue dotted line) after some period of time. 
 
 第3階層目のPlasmaチェーンの参加者は、一定期間後に別のチェーンに一緒に移動します（青色の点線）。
 
 
-This construction, in non-Byzantine environments, coalesces the tree of blockchain states and update all child Plasma chains. 
-
 この構造は、非ビザンチン環境では、ブロックチェーンの状態のツリーを結合し、すべてのPlasmaチェーンを更新する。
-
-An entire set of updates across all chains can be attested to in a 32-byte hash with a signature. 
 
 すべてのチェーンにわたる更新セット全体は、署名付きの32バイトハッシュで証明されます。
 
 
 2.3 Plasma Proof-of-Stake
-
-While it’s fairly interesting to be able to hold fund on behalf of others with a single validator, we propose a method whereby a single party can enforce state with a set of validators, often in a proof-of-stake framework requiring either ETH bonding, or bonding in a token (e.g. ERC-20). The consensus mechanism for this proof of stake system, is again, enforced in an onblockchain smart contract. We attempt to replicate the incentives around the Nakamoto Consensus, but using Proofof-Stake bonds. We believe that one of the more useful incentive mechanisms constructed as a result of the Nakamoto mechanism is that there is incredible incentive to minimize block withholding attacks. This is since leaders are only probabilistically elected. Leaders are probabilistically known over time (in the original implementation it was 6 confirmations). When one finds a block, one is fairly sure they are likely the leader, but they are not yet certain if they are the leader. To ensure that they are the leader, they propagate their blocks to all participants on the network to maximize their odds. We believe this is a significant if not the key contribution with the Nakamoto mechanism and attempt to replicate this incentive. Proof-of-stake coalitions face this issue since it’s possible if one does straight leader election, block withholding attacks by majority cartels (also generalized as the ”data availability problem”) become magnified. We can mitigate this in Plasma Proof-of-Stake by allowing stakeholders to publish on the root blockchain or parent Plasma chain which contains a committed hash of their new block. Validators only build upon blocks which they have fully validated. They can build upon blocks in parallel (to encourage maximum information sharing). We create incentives for validators to represent the past 100 blocks to match the current staker ratio (i.e. if one stakes 3 percent of the coins, they should be 3 percent of the past 100 blocks), by rewarding more transaction fees to be paid out to accurate representation. Excess fees (due to suboptimal behavior by stakers) goes to a pool to pay out fees in the future. A commitment exists in every block which includes data from the past 100 blocks (with a nonce). The correct chain tip is the chain with summed weight of the highest fees. After a period of time, the blocks are finalized. 8 Figure 6: Presume that Alice, Bob, and Carol are 3 validators with equal amount of weight. They collectively are incentivized to build a round-robin structure for maximum returns. These commitments are submitted to the parent/root chain. Chain tip is contingent on maximum weight score by correct distribution of blocks over n periods (blue is the current candidate chain tip, red is an orphan). Suboptimal chain tips has any excess fees go into a pool for future validators with correctness above some threshold (e.g. 90%). After some n periods it’s presumed that the blue chain tip is finalized. This encourages participants to participate and replicates the 51% attack assumptions in the Nakamoto consensus. In the event a chain is attacked via block withholding or other Byzantine behavior, the non-Byzantine participants conduct a mass compact withdrawal on the parent/root blockchain. If bonds for the highest parent Plasma chain are in the form of tokens, it is likely the value of the token will significantly devalue as a result of the mass exit. 2.4 Blockchains as MapReduce blockchain : git :: Plasma : Hadoop (MapReduce) By constructing computation in a MapReduce format, it is also easy to design computation and state transitions in a hierarchical tree. MapReduce gives a framework for high scale computation across thousands of nodes. The blockchain faces similar issues in meeting computational scale, but has additional requirements in generating proofs of computation. 9 Figure 7: The blue is messages passed in the parent block to the children. The children must commit to the parent block within some n number of blocks or else face chain halting. The block data distributes work to the children who are committing to computation. The 3rd level child does the computation and returns a wordlist (e.g. 3 occurrences of the word ”Hello”, 2 occurrences of the word ”World” in the chapter they are responsible for computing). The wordlist data is returned to the parent as part of the commitment, wordlists are combined together from the children and submitted to the parent, ultimately completing a global wordlist (e.g. the entire corpus contains 100 instances of ”Hello” and 150 instances of the word ”World”). This creates economically enforcible computation at scale, with only one block header/hash committed on the root chain to encompass very high amount of data and work. It is only if a block is faulty that proof of invalidity is published, otherwise extremely minimal amounts of data is submitted on the root chain periodically. We propose a method whereby the map phase includes commitments on data to computation as input, and in the reduce step includes a merkleized proof of state transition when returning the result. The merkleized state transition is enforced via fraud proofs constructed on the root blockchain. It is also possible to construct a zk-SNARKs proof of state transitions. For some computational constructions, a bitmap on state transitions may also be necessary in the reduce step (therefore more than one bit can be used per UTXO/account for these use cases). Our construction enables incredible high-scale computation, with time or speed tradeoffs. These tradeoffs produce a network where nodes assert computation and participants are responsible for verifying them. This does not produce a system whereby one can completely outsource computation without trust, it enables the ability to compress computation into bonded proofs. These bonded proofs encourage participants to only attest to things honestly. This again, follows the narrative in the Lightning Network, whereby if a tree falls in the forest and nobody listens to it, it presumes that it doesn’t matter whether it makes a sound or not. Similarly, if no one is watching/enforcing the computation, it’s presumed to be correct, or it simply doesn’t matter what the result may be. Computation can be watched by any participant in open networks, but participants who hold balances and/or 10 require correct computation will periodically watch the chain to ensure correctness. The scaling benefit comes from removing the requirement to watch the chains one is not economically impacted by, one should watch the chains where one wishes to enforce correct behavior. Behavior on other Plasma chains can be netted together as part of the reduce step so that the computation which affects one is expressed in a minimal state. For example, for a decentralized exchange, one doesn’t care about which counterparties put in what order, they only need to see one coalesced orderbook, so one only needs to observe all other chains as a single counterparty, whereas one’s own chain is fully validated to enforce transactions and order fills to the correct person (including oneself). Another example is one can construct a BBS on a tree of Plasma chains, and one doesn’t need to receive updates on the topics one doesn’t care about. Figure 8: One only needs to watch the data which one wants to enforce. If economic activity or computation occurs on other Plasma chains which is not necessary to enforce (gray), one can treat all other chains as a single counterparty. E.g. in a Plasma decentralized exchange, one just needs to watch the chains which affects one’s commitments (bolded blue). 2.5 A Description of Economic Incentives around Persistent Decentralized Autonomous Blockchains We propose a structure whereby one can create economic incentives to persistently keep a child blockchain running. For state which does not require significant complexity or reliance in state transitions, the native token (e.g. ETH for Ethereum) can be used for bonding of state. However, for complex contracts, there may be significant incentives to continue operating the chain due to incentives around ensuring liveness and order fairness of the system[8][9]. 11 Every Plasma chain is represented by a set of contracts. These contracts enforce the consensus rules of the chain, and fraud causes significant penalties to be applied if the fraud proof can be produced. However, to incentivize avoidance of Byzantine states, especially around correctness and liveness, it may be ideal to create a token per contract. This token represents the network effects in operating the contract, and creates an incentive to maximize security of this contract. As the Plasma chain requires the token to secure the network in a Proof-of-Stake structure, stakers are disincentivized against Byzantine behaviors or faults as that would cause a loss in value of the token. The role of the token is to ensure there is costs localized to the validators if they act faulty via value declines in the token. With simple contracts and business logic such as a basic contract account holding funds on behalf of its users, an Ethereum bond can represent a stake in the Plasma chain. The stakes who put up bonds (whether it be a token or ETH) have incentives to continue operating the network as they receive transaction fees for operating the network. These transaction fees are then paid out to the stakers of the network which encourages nonByzantine behavior, and creates long-term value for the token. Since the stakers have an incentive to continue operating this network to collect transaction fees, they will persistently run the chain and are bound by the fraud proofs defined in the contracts in the root blockchain.
-
-

@@ -1,103 +1,71 @@
-3 Design Stack and Smart Contracts 
-3デザインスタックとスマートコントラクト
+3 デザインスタックとスマートコントラクト
 
-Historically, many people believe that the blockchain is best applied towards transactional payments as a gross settlement system.
 歴史的に、多くの人々はブロックチェーンが決済システムとしてトランザクションの支払いに最も適したものであると信じている。
 
-However, it’s understood that a gross settlement system has difficulty scaling.
 しかし、決済システム全体のスケールが難しいことも判明している。
 
-Net settled designs such as the Lightning Network, a payment channel network, changes the structure to allow for nearly unlimited payments between participants.
 Lightning Network、payment channel networkのような現時点での解決策はブロックチェーンの構造を変更し参加者間でほぼ無限の取引を実現する。
 
 
-Transactional capacity is increased dramatically as channels are net-settled on the blockchain.
 ブロックチェーン上でチャネルがスケール問題を解決することでトランザクションの容量は劇的に増加する。
 
-Payments can be routed across a network of these channels. 
 決済はそれらのチェーンを通して送られるのである。
 
-This structure additionally allows for effectively instantaneous payments.
 この構造は、さらに効果的に瞬時の支払いが可能にする。
 
-This is instrumental for not only payments which require a high degree of time sensitivity, but also for contracts as well.
 これは、瞬時に送金したい決済に有効なだけではなく、コントラクトにも有効である。
 
-Plasma is not designed to reach assured finality rapidly, even though transactions are confirmed in the child chains rapidly, it requires it to be finalized on the underlying root blockchain. 
 Plasmaは、トランザクションが子チェーンでファイナリティが迅速に決定するけれど、それ自体が、ファイナリティの迅速な確保の為に作られているわけではない。Plasmaはルートブロックチェーンでのファイナリティを確保する。
 
 
 
-Channels are necessary to be able to have rapid local finality of payments and contracts (enforcible on-chain). 
 チャネルはローカルで迅速に決済とコントラクト(enforcible on-chain)のファイナリティを確保することができる必要がある。
 
-In smart contracts, there is an issue of the ”free option problem” whereby the receiver (second or last signer) of a smart contract offer is needed to sign and broadcast the contract in order to enforce it – during that time the receiver of the contract may treat it as a free option and refuse to sign the contract if the activity does not interest them. 
 スマートコントラクトでは、”free option problem” の問題がある。スマートコントラクトの受信者（2番目もしくは最後）がコントラクトを実行するためにそれに署名し拡散する必要がある。ーその間に、もしそのコントラクトが受信者によって関心のあるものでなければ、受信者はコントラクトをfree optionとして扱い、署名を拒否することができる可能性がある。
 
-This is exacerbated as smart contracts are most effective when dealing with counterparties who are untrusted (as that creates minimization in counterparty risk and thereby information 12 costs). 
 信頼されていない相手と取引をするときにスマートコントラクトが最も効果的であるとして、これは悪化する。 
 
-Plasma does not solve this problem on its own, as there are no guarantees of atomicity with the first and second signature step for interactive protocols in blockchains. 
 Plasmaはこの問題を解決しない。ブロックチェーンのインタラクティブなプロトコルの最初と2番目の署名ステップに保証人がいないからだ。
 
-With Lightning (including Lightning on top of Plasma), it’s possible to do incredibly rapid updates with reasonable sense of localized finality.
 Lightning(Plasma上のLightningも含む）は許容範囲内のローカライズされたファイナリティによって劇的に迅速なアップデートを可能にする。
 
-Instead of having a single payment which gives optionality to the last party, a payment can instead be split into many small payments.
 最後の参加者に任意で与えるsingle paymentの代わりに、決済情報は多くの小さな決済情報に分割され渡される。
 
-This minimizes the free option to the amount per split fraction.
 これは分割された支払いにおけるfree optionを最小化する。
 
 
-Since the second party of the smart contract only has the free option on the amount in the split fraction, the value of the free option is minimized.
 スマートコントラクトの第二者のみが、分割された支払いのfree optionを持つので、free optionの価値自体が最小化される。
 
-Within the above use cases, it’s possible that Lightning may be a primary interface layer for rapid financial payments/contracts on top of Plasma, as Plasma allows for ledger updates with minimal root chain state commitments. 
 Plasmaは、最小のルートチェーンのState commitmentsによるアップデートができるので、上記のユースケースのように、LightningはPlasma上の迅速なフィナンシャル決済/取引の主要なインターフェイスレイヤーになるかもしれない。
 
 
-Figure 9: At the root is the blockchain, which is the adjudication layer for contracts and payments.
 図9 : コントラクトと決済を判定するレイヤー、ルートブロックチェーンについて。
 
-The contracts themselves are located on the root blockchain.
 コントラクトそれ自体はルートブロックチェーンに存在する。
 
- The Plasma chain contains the current ledger state which can be settled and redeemed on the root blockchain.
 Plasmaチェーンはルートブロックチェーンの変化を反映した現在のstateを含む。
 
-Fraud proofs exist to allow for funds to be redeemed. 
 Fraud proofsは資金が補填される為に存在する。
 
-Plasma represents a nested set of Plasma chains to create venues to withdraw funds in a scalable way with minimal blockchain transactions.
 Plasmaはブロックチェーン上で最小トランザクション数のスケールする方法で資金を引きざす為に作られた下層Plasmaチェーンを代表する
 
-On top is the Lightning Network, which allows for instantaneous payments across Plasma and Block Chains.
 Lightning Networkの上層レイヤーで瞬時の決済がPlasmaとブロックチェーン間で行われる。
 
 
-3.1 The Most Significant Problem in Sharding is Information 
 3.1 最も重要なShardingの問題は情報である。
 
-With sharded data sets, there is a significant risk of individual shards to refuse to disclose information. 
 分割されたデータセットには、各々のShardで情報を公開することを拒否する重大なリスクがある。
 
-It would thereby be impossible to produce fraud proofs. 
 それによって、fraud proofsを生成することが不可能である。
 
-We attempt to resolve this using 3 strategies: 
 私達は3つの戦略でこの問題を解こうとしています。
 
-1. A new Proof-of-Stake mechanism which encourages block propagation. The underlying mechanism does not entirely rely upon correct functionality of incentives. However, this should significantly decrease faulty behavior. 
-ブロックの伝播を促進する新しいProof-of-Stakeのメカニズム。根底にあるメカニズムは現在のインセンティブの機能性に完全に依拠していない。これは誤った行動を劇的に減少させる。
+1.ブロックの伝播を促進する新しいProof-of-Stakeのメカニズム。根底にあるメカニズムは現在のインセンティブの機能性に完全に依拠していない。これは誤った行動を劇的に減少させる。
 
-2. Significant withdrawal delays which allow for accurate withdrawal proofs. Individuals don’t need to watch the blockchain that frequently and fraud on higher plasma chains can be prevented on the root blockchain by any honest actor on the same plasma chain as the user. In the event of block withholding, plasma chains can immediately lock up funds via a proof, preventing an attacker from submitting fraudulent withdrawal proofs. In the event the attacker attempts to withdraw funds above their limit and more funds are locked, the attacking plasma chain loses their deposit. 
 2.  Significant withdrawal delays which allow for accurate withdrawal proofs. 
 Individuals don’t need to watch the blockchain that frequently and fraud on higher plasma chains can be prevented on the root blockchain by any honest actor on the same plasma chain as the user. ブロックを隠し持っている場合には、Plasmaチェーンは即座に資金を凍結し、攻撃者が不正な証拠を提出するのを妨げる。固定されている資金よりも多くの額を攻撃者が引き出そうとした際には、攻撃しているplasmaチェーンはデポジットを失う。
 
-
-3. Creating child chains whereby transactions can be propagated in any parent chain. For this reason, participants on networks will desire to submit transactions to deep child chains. This creates economic efficiency for smaller balances which do not have the economic ability to pay high transaction fees on the root blockchain and therefore moving funds can be achieved with many small balances. People are therefore encouraged to create deeply nested child chains which represent significant value. Note that there is some presumption about reputation around chain selection for individuals holding very small balances which cannot be on the root blockchain transaction fees, however is mitigated by having deeply nested chains. This security model is the key novelty of plasma chains.
 3. どの親チェーンにもトランザクションを伝播できる子チェーンを作る。これによって、ネットワークの参加者はトランザクションを深い子チェーンへ伝播したいと思うようになる。これは、高い手数料を払うことのできないルートブロックチェーン上の少額の取引に経済効率性を創り出す。従って、流動資金は少額となる。したがって、参加者は多くの価値を代表する子チェーンを作ることを促進される。注意しなければ行けないのは、とても少量の額をもっている個人にとっていくつかのチェーン選択に関する前提が存在しているということで、
-Note that there is some presumption about reputation around chain selection for individuals holding very small balances which cannot be on the root blockchain transaction fees, however is mitigated by having deeply nested chains. 
+
 このセキュリティモデルがPlasmaチェーンの鍵である。
 
