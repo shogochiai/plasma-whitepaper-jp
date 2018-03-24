@@ -1,1 +1,1 @@
-node index.js && open pdf/Plasmaホワイトペーパー_最新版.pdf
+node index.js && open ./Plasmaホワイトペーパー.pdf
