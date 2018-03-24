@@ -1,0 +1,24 @@
+{
+  "name": "plasma-whitepaper-jp",
+  "version": "1.0.0",
+  "description": "Ethereum Plasma whitepaper Japanese Edition",
+  "main": "index.js",
+  "scripts": {
+    "start": "bin/publish",
+    "clear": "bin/clear"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shogochiai/plasma-whitepaper-jp.git"
+  },
+  "author": "See 2_TRANSLATORS.tsv",
+  "license": "See 1_LICENSE.md",
+  "bugs": {
+    "url": "https://github.com/shogochiai/plasma-whitepaper-jp/issues"
+  },
+  "homepage": "https://github.com/shogochiai/plasma-whitepaper-jp#readme",
+  "dependencies": {
+    "commander": "^2.15.1",
+    "node-latex": "^2.4.4"
+  }
+}
