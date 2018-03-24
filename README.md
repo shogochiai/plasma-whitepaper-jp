@@ -1,17 +1,16 @@
 # plasma-whitepaper-jp
-[plasma.io/plasma.pdfの全文和訳](./Plasmaホワイトペーパー.pdf)です
-
-
-## Overview / 概要
-- EthereumのPlasmaホワイトペーパーの日本語版です / Ethereum Plasma whitepaper Japanese Edition
+- [plasma.io/plasma.pdfの全文和訳](./Plasmaホワイトペーパー.pdf)です
 - 著作権に関しては [1_LICENSE.md](./1_LICENSE.md) に記述してあります / Copyrights is described in [1_LICENSE.md](./1_LICENSE.md)
 
 
 ---
 
 ## Edit Contribution / 編集のご協力
-- gitが扱えない方はgithubのIssueよりテンプレート文にしたがって修正提案をお願いします
-- それ以外の方はなるべくforkののちにmasterブランチにPull-requestをお願いします（ご自分で、ご自分の名前を [3_CONTRIBUTORS.md](./3_CONTRIBUTORS.md) 末尾に加えてください。）
+- とにかく気軽に、ホワイトペーパーを読んだついでにフィードバックをください
+### 修正
+- Issueのコメント欄にひとこと書くだけでも結構です
+### 提案
+- 気になる点をIssueに立てて、立て逃げしていただいて結構です。指摘がないと改善しないので助かります。
 
 ## Dev Contribution / 開発のご協力
 - `NodeJS 8.6.0` 環境で `LaTeX` によって構築されました
