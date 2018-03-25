@@ -1,7 +1,7 @@
 # plasma-whitepaper-jp
 - [plasma.io/plasma.pdfの全文和訳](./Plasmaホワイトペーパー.pdf)です
 - 著作権に関しては [1_LICENSE.md](./1_LICENSE.md) に記述してあります / Copyrights is described in [1_LICENSE.md](./1_LICENSE.md)
-
+- 原著が「ワーキングドラフト」であるため、zk-SNARKsやPlasmaCashに関する更新を追随して翻訳する必要がありそうです。メンテナ希望者は連絡をください。
 
 ---
 
