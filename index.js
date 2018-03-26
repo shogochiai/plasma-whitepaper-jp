@@ -7,7 +7,7 @@ const PDF_NAME = `Plasmaホワイトペーパー.pdf`
 let listTex = fs.readdirSync('./tex')
 let body = listTex.map(n=> fs.readFileSync('./tex/'+n) ).join("\n")
 let translatorsBlock = fs.readFileSync("2_TRANSLATORS.tsv").toString().split('\n').map(t=> t.replace(/  /, ' / ') ).join('\n')
-let contributersBlock = fs.readFileSync("3_CONTRIBUTORS.md")
+let contributersBlock = fs.readFileSync("3_CONTRIBUTORS.tsv")
 
 // Transalators and Contributors
 let footer = `
