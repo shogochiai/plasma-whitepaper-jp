@@ -4,8 +4,9 @@
   "description": "Ethereum Plasma whitepaper Japanese Edition",
   "main": "index.js",
   "scripts": {
-    "start": "bin/publish",
-    "clear": "bin/clear"
+    "build": "blankpaper build",
+    "setup": "blankpaper setup",
+    "install": "blankpaper install"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,9 @@
   },
   "homepage": "https://github.com/shogochiai/plasma-whitepaper-jp#readme",
   "dependencies": {
+    "blankpaper": "^1.0.3",
     "commander": "^2.15.1",
+    "node": "^9.9.0",
     "node-latex": "^2.4.4"
   }
 }
